@@ -6,13 +6,13 @@ A modern, **gamified Spanish learning web app** with interactive lessons, quizze
 
 ## ✨ Features
 
-* **Interactive Lessons** – Context slides, reveal cards, and practice quizzes
-* **Gamified Progress** – Visual journey map with unlockable lessons and an XP system
-* **Dark Mode** – Toggle between light and dark themes with persistent preferences
-* **Responsive Design** – Works seamlessly on mobile, tablet, and desktop
-* **Glassmorphism UI** – Modern frosted-glass effects and smooth gradient animations
-* **Progress Tracking** – Saves completed lessons using local storage
-* **Celebration Effects** – Confetti explosions and animations on lesson completion
+* **Interactive Lessons** - Context slides, reveal cards, and practice quizzes
+* **Gamified Progress** - Visual journey map with unlockable lessons and an XP system
+* **Dark Mode** - Toggle between light and dark themes with persistent preferences
+* **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
+* **Glassmorphism UI** - Modern frosted-glass effects and smooth gradient animations
+* **Progress Tracking** - Saves completed lessons using local storage
+* **Celebration Effects** - Confetti explosions and animations on lesson completion
 
 ---
 
