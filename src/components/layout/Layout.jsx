@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, IconButton, useScrollTrigger, Slide } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, IconButton, useScrollTrigger, Slide, Button, Avatar, Menu, MenuItem } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, Heart, Zap, Moon, Sun } from 'lucide-react';
+import { Sparkles, Heart, Zap, Moon, Sun, LogOut, User } from 'lucide-react'; // Added LogOut, User
+import { useAuth } from '../../context/AuthContext'; // <--- NEW IMPORT
 
 // Hide navbar on scroll
 function HideOnScroll({ children }) {
@@ -15,6 +16,9 @@ function HideOnScroll({ children }) {
 
 const Layout = ({ children, darkMode, onToggleDarkMode }) => {
   const location = useLocation();
+  const { user, login, logout } = useAuth(); // <--- Get User Data
+  const [anchorEl, setAnchorEl] = useState(null); // For dropdown menu
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [floatingEmojis] = useState(['🌟', '💃', '🎸', '🌮', '🎨', '☀️']);
 
@@ -29,6 +33,14 @@ const Layout = ({ children, darkMode, onToggleDarkMode }) => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Menu Handlers
+  const handleMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const handleLogout = () => {
+    handleClose();
+    logout();
+  };
 
   return (
     <Box 
@@ -199,14 +211,17 @@ const Layout = ({ children, darkMode, onToggleDarkMode }) => {
               </Typography>
             </Box>
 
-            {/* Decorative Icon Buttons */}
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            {/* Decorative Icon Buttons & Auth */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              
+              {/* Original Decorative Buttons */}
               <IconButton
                 sx={{
                   background: 'rgba(255, 255, 255, 0.2)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   transition: 'all 0.3s ease',
+                  display: { xs: 'none', sm: 'flex' }, // Hide on mobile if crowded
                   '&:hover': {
                     background: 'rgba(255, 107, 157, 0.3)',
                     transform: 'rotate(15deg) scale(1.1)',
@@ -222,6 +237,7 @@ const Layout = ({ children, darkMode, onToggleDarkMode }) => {
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   transition: 'all 0.3s ease',
+                  display: { xs: 'none', sm: 'flex' }, // Hide on mobile if crowded
                   '&:hover': {
                     background: 'rgba(255, 217, 61, 0.3)',
                     transform: 'rotate(-15deg) scale(1.1)',
@@ -249,6 +265,76 @@ const Layout = ({ children, darkMode, onToggleDarkMode }) => {
               >
                 {darkMode ? <Sun size={20} color="#FFFFFF" /> : <Moon size={20} color="#FFFFFF" />}
               </IconButton>
+
+              {/* --- NEW: LOGIN BUTTONS --- */}
+              {user ? (
+                <>
+                  <IconButton 
+                    onClick={handleMenu} 
+                    sx={{ 
+                      p: 0, 
+                      ml: 1,
+                      border: '2px solid rgba(255,255,255,0.5)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Avatar alt={user.displayName} src={user.photoURL} />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    keepMounted
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    PaperProps={{
+                      sx: {
+                        borderRadius: '16px',
+                        mt: 1.5,
+                        background: darkMode ? 'rgba(26, 26, 46, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: darkMode ? 'white' : 'inherit'
+                      }
+                    }}
+                  >
+                    <MenuItem disabled sx={{ opacity: 0.7, fontSize: '0.85rem' }}>
+                      {user.displayName}
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout} sx={{ gap: 1, fontWeight: 600, color: '#FF6B9D' }}>
+                      <LogOut size={16} /> Logout
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={login}
+                  startIcon={<User size={18} />}
+                  sx={{
+                    ml: 1,
+                    borderRadius: '20px',
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: 'none',
+                    color: 'white',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    minWidth: 'auto', // Keeps it compact
+                    px: 3,
+                    '&:hover': {
+                      background: 'rgba(255, 255, 255, 0.3)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }
+                  }}
+                >
+                  Sign In
+                </Button>
+              )}
+
             </Box>
           </Toolbar>
         </AppBar>

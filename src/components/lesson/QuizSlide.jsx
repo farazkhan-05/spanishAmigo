@@ -10,6 +10,16 @@ const QuizSlide = ({ data, onNext }) => {
   const [attempts, setAttempts] = useState(0);
   const [showHint, setShowHint] = useState(false);
 
+  // 🔥 FIXED - Reset state when question changes
+  useEffect(() => {
+    setSelectedOptionIndex(null);
+    setStatus('idle');
+    setConfetti([]);
+    setShakeOption(null);
+    setAttempts(0);
+    setShowHint(false);
+  }, [data.question]); // Reset whenever the question text changes
+
   // Trigger confetti on correct answer
   useEffect(() => {
     if (status === 'correct') {
