@@ -1,6 +1,6 @@
 # SpanishAmigo
 
-A modern, **gamified Spanish learning web app** with interactive lessons, quizzes, and progress tracking.
+A modern, gamified Spanish learning web app with interactive lessons, quizzes, and progress tracking.
 
 ---
 
@@ -8,10 +8,11 @@ A modern, **gamified Spanish learning web app** with interactive lessons, quizze
 
 * **Interactive Lessons** - Context slides, reveal cards, and practice quizzes
 * **Gamified Progress** - Visual journey map with unlockable lessons and an XP system
+* **User Authentication** - Secure Google Sign-In powered by Firebase Authentication
+* **Cloud Sync** - Progress is securely saved to the cloud using Firestore and synced across devices
 * **Dark Mode** - Toggle between light and dark themes with persistent preferences
 * **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
 * **Glassmorphism UI** - Modern frosted-glass effects and smooth gradient animations
-* **Progress Tracking** - Saves completed lessons using local storage
 * **Celebration Effects** - Confetti explosions and animations on lesson completion
 
 ---
@@ -23,11 +24,34 @@ A modern, **gamified Spanish learning web app** with interactive lessons, quizze
 npm install
 
 # Install additional packages
-npm install lucide-react react-confetti
+npm install lucide-react react-confetti firebase
 
 # Start development server
 npm run dev
 ```
+
+### 🔐 Environment Setup
+
+This project uses Firebase. You must create a `.env.local` file in the root directory and add your Firebase configuration keys.
+
+Create a file named:
+
+```
+.env.local
+```
+
+Add the following template and replace the values with your own Firebase project credentials:
+
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+After adding the environment variables, restart the development server if it is already running.
 
 ---
 
@@ -35,27 +59,25 @@ npm run dev
 
 The app consists of three main screens:
 
-### **Course Map**
+### Course Map
 
 Shows your learning journey with locked and unlocked lessons.
 
-```bash
-Navigate to: /
-```
+Navigate to: `/`
 
-### **Lesson Player**
+### Lesson Player
 
 Interactive lessons with slides and quizzes.
 
-```bash
-Navigate to: /lesson/:id
-```
+Navigate to: `/lesson/:id`
 
-### **Success Screen**
+### Success Screen
 
 A celebration page displayed after completing a lesson.
 
-You can toggle **Dark Mode** using the moon/sun icon in the navbar. Your preference is automatically saved.
+You can now click **Sign In** (Google) to securely log in and sync your progress across devices.
+
+Dark Mode can be toggled using the moon/sun icon in the navbar. Your preference is automatically saved.
 
 ---
 
@@ -66,9 +88,10 @@ src/
 ├── components/
 │   ├── common/
 │   └── layout/
-│       └── Layout.jsx          # Main layout with navbar and footer
+│       └── Layout.jsx              # Main layout with navbar and footer
 ├── context/
-│   └── ProgressContext.jsx     # Progress state management
+│   ├── AuthContext.jsx             # Firebase authentication state management
+│   └── ProgressContext.jsx         # User progress management (Firestore synced)
 ├── data/
 │   ├── lessons/
 │   │   ├── lesson1.js
@@ -76,23 +99,24 @@ src/
 │   │   ├── lesson3.js
 │   │   ├── lesson4.js
 │   │   └── lesson5.js
-│   └── curriculum.js           # Lesson content index
+│   └── curriculum.js               # Lesson content index
+├── firebase.js                     # Firebase configuration and initialization
 ├── hooks/
-│   └── useLessonNavigation.js  # Lesson navigation logic
+│   └── useLessonNavigation.js      # Lesson navigation logic
 ├── pages/
 │   ├── lesson/
-│   │   ├── ContextSlide.jsx    # Introduction slides
-│   │   ├── QuizSlide.jsx       # Multiple-choice quizzes
-│   │   ├── RevealSlide.jsx     # Translation reveal cards
-│   │   └── SuccessScreen.jsx   # Completion celebration
-│   ├── CourseMap.jsx           # Journey map view
+│   │   ├── ContextSlide.jsx        # Introduction slides
+│   │   ├── QuizSlide.jsx           # Multiple-choice quizzes
+│   │   ├── RevealSlide.jsx         # Translation reveal cards
+│   │   └── SuccessScreen.jsx       # Completion celebration
+│   ├── CourseMap.jsx               # Journey map view
 │   ├── Home.jsx
-│   ├── LessonPlayer.jsx        # Lesson container
+│   ├── LessonPlayer.jsx            # Lesson container
 │   └── NotFound.jsx
 ├── theme/
-│   └── theme.js                # MUI theme configuration
+│   └── theme.js                    # MUI theme configuration
 ├── utils/
-│   └── storage.js              # LocalStorage helpers
+│   └── storage.js                  # Utility helpers
 ├── App.css
 ├── App.jsx
 ├── index.css
@@ -109,6 +133,8 @@ src/
 * Lucide React (icons)
 * React Confetti
 * Vite
+* Firebase Authentication
+* Cloud Firestore
 
 ---
 
