@@ -259,15 +259,17 @@ const LessonPlayer = () => {
         <Box
           sx={{
             width: '100%',
-            background: 'rgba(255, 255, 255, 0.95)',
+            background: (theme) => theme.palette.mode === 'dark' ? 'rgba(26, 26, 46, 0.95)' : 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(40px) saturate(200%)',
             borderRadius: '32px',
-            boxShadow: `
+            boxShadow: (theme) => theme.palette.mode === 'dark'
+              ? '0 20px 60px rgba(0, 0, 0, 0.5)'
+              : `
               0 0 0 1px rgba(255, 255, 255, 0.5),
               0 20px 60px rgba(108, 99, 255, 0.3),
               0 40px 100px rgba(255, 107, 157, 0.2)
             `,
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            border: (theme) => theme.palette.mode === 'dark' ? '1px solid rgba(162, 155, 254, 0.2)' : '1px solid rgba(255, 255, 255, 0.3)',
             p: { xs: 3, sm: 4, md: 5 },
             minHeight: { xs: 400, md: 500 },
             display: 'flex',
